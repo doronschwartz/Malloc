@@ -43,13 +43,21 @@ team_t team = {
 
 
 #define SIZE_T_SIZE (ALIGN(sizeof(size_t)))
-
+#define HEADER_SIZE (ALIGN(sizeof(header)))
+// This is the header for each block, which is essentialy a double linked list
+typedef struct node{
+    struct node * next;
+    struct node * prev;
+    size_t s;
+}header;
 /* 
  * mm_init - initialize the malloc package.
  */
 int mm_init(void)
 {
-    return 0;
+    header *start = mem_sbrk(HEADER_SIZE);
+    start->next = start;
+    start->prev = start;
 }
 
 /* 
