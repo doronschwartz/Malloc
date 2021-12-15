@@ -76,12 +76,21 @@ void *mm_malloc(size_t size)
         return (void *)((char *)p + SIZE_T_SIZE);
     }
 }
-
+// this method is mostly finished
 void *findspace(size_t size){
      node *blockpointer = mem_heap_lo();
+    // Go through the heap, trying to find the block that could be the fit for the space that we are looking for.
     for(blockpointer = blockpointer->next;blockpointer != mem_heap_lo();blockpointer = blockpointer->next){
-        
+        if(blockpointer->s == size){
+            // essentialy we have a list of free blocks, so now i am going to remove the block using common linked list shtick and go by the seat of my pants
+            // Make the previous of the block which is free have its next pointer point to the block that is after the free;
+            blockpointer->prev->next = blockpointer->next;
+            // make the block that is next have its previous block point towards the current 
+            blockpointer->next->prev = blockpointer->prev;
+            return blockpointer;
+        }
     }
+    return NULL;
 }
 /*
  * mm_free - Freeing a block does nothing.
