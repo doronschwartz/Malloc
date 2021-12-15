@@ -24,7 +24,7 @@
  ********************************************************/
 team_t team = {
     /* Team name */
-    "ED",
+    "E.D.",
     /* First member's full name */
     "Doron Schwartz",
     /* First member's email address */
@@ -32,7 +32,7 @@ team_t team = {
     /* Second member's full name (leave blank if none) */
     "Eitan Remer",
     /* Second member's email address (leave blank if none) */
-    ""
+    "eremer@mail.yu.edu"
 };
 
 /* single word (4) or double word (8) alignment */
@@ -73,6 +73,7 @@ void *mm_malloc(size_t size)
  */
 void mm_free(void *ptr)
 {
+
 }
 
 /*
