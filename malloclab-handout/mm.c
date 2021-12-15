@@ -43,19 +43,20 @@ team_t team = {
 
 
 #define SIZE_T_SIZE (ALIGN(sizeof(size_t)))
-#define HEADER_SIZE (ALIGN(sizeof(header)))
+#define HEADER_SIZE (ALIGN(sizeof(node)))
 // This is the header for each block, which is essentialy a double linked list
+void *findspace(size_t size);
 typedef struct node{
-    struct node * next;
-    struct node * prev;
+     node * next;
+     node * prev;
     size_t s;
-}header;
+}node;
 /* 
  * mm_init - initialize the malloc package.
  */
 int mm_init(void)
 {
-    header *start = mem_sbrk(HEADER_SIZE);
+    node *start = mem_sbrk(HEADER_SIZE);
     start->next = start;
     start->prev = start;
 }
@@ -66,8 +67,8 @@ int mm_init(void)
  */
 void *mm_malloc(size_t size)
 {
-    int newsize = ALIGN(size + SIZE_T_SIZE);
-    void *p = mem_sbrk(newsize);
+    int newsize = ALIGN(size + HEADER_SIZE);
+    void *p = find(newsize);
     if (p == (void *)-1)
 	return NULL;
     else {
@@ -76,6 +77,12 @@ void *mm_malloc(size_t size)
     }
 }
 
+void *findspace(size_t size){
+     node *blockpointer = mem_heap_lo();
+    for(blockpointer = blockpointer->next;blockpointer != mem_heap_lo();blockpointer = blockpointer->next){
+        
+    }
+}
 /*
  * mm_free - Freeing a block does nothing.
  */
