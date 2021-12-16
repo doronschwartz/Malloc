@@ -67,16 +67,23 @@ int mm_init(void)
  */
 void *mm_malloc(size_t size)
 {
+    //Take the size of the block, take the amount we need for our stupid header, and check.
     int newsize = ALIGN(size + HEADER_SIZE);
-    void *pointer = find(newsize);
+    if(newsize < ALIGN(sizeof(node))){
+            newsize = ALIGN(sizeof(node));
+    }
+    size_t *pointer;
+    *pointer = find(newsize);
     if (pointer){
-        
+        //cast the pointer to the block as it is currently void and use the size anded with one to succesfully retrieve the header pointer from the void pointer 
+        *pointer = ((node*)pointer)->s | 1;
     }
-	    
-    else {
-        *(size_t *)p = size;
-        return (void *)((char *)p + SIZE_T_SIZE);
+	else {
+        // Oh dang, we couldnt find any freaking pointer in the find method, 
+        pointer = mem_sbrk(newsize);
+        *pointer = newsize | 1;
     }
+    return (void *)((char *)pointer + HEADER_SIZE);
 }
 // this method is mostly finished, 
 void *findspace(size_t size){
@@ -99,6 +106,23 @@ void *findspace(size_t size){
  */
 void mm_free(void *ptr)
 {
+    // This is where things get funky, got to use char pointer so the subtraction will move in one byte increments instead of 8 byte increments.
+    node *blockheader = (char *)ptr - HEADER_SIZE;
+    //Go get the beginning of the list
+    node *listheader = mem_heap_lo();
+    // going to need to finish up the problems of this not really 
+    blockheader->s = *(size_t *)blockheader;
+    //got to mess with the individual weirdness now of moving it back into the list, Ill put the bkock for our purposes there now.
+    // The current block  
+    blockheader->next = listheader -> next ;
+    // The block's own previous will be the beginning
+    blockheader->prev = listheader;
+    // The freelist is now going to have its next objct in the list, BACK LINK will be the block header aspect
+    listheader -> next -> prev = blockheader;
+    // This is 
+    listheader -> next = listheader -> next -> prev;
+
+    // need to still coalesce the blocks when there is a lot of open space
 
 }
 
