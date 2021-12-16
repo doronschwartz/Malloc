@@ -68,15 +68,17 @@ int mm_init(void)
 void *mm_malloc(size_t size)
 {
     int newsize = ALIGN(size + HEADER_SIZE);
-    void *p = find(newsize);
-    if (p == (void *)-1)
-	return NULL;
+    void *pointer = find(newsize);
+    if (pointer){
+        
+    }
+	    
     else {
         *(size_t *)p = size;
         return (void *)((char *)p + SIZE_T_SIZE);
     }
 }
-// this method is mostly finished
+// this method is mostly finished, 
 void *findspace(size_t size){
      node *blockpointer = mem_heap_lo();
     // Go through the heap, trying to find the block that could be the fit for the space that we are looking for.
