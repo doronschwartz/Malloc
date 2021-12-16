@@ -24,7 +24,7 @@
  ********************************************************/
 team_t team = {
     /* Team name */
-    "E.D.",
+    "ED",
     /* First member's full name */
     "Doron Schwartz",
     /* First member's email address */
@@ -76,16 +76,16 @@ void *mm_malloc(size_t size)
     *pointer = find(newsize);
     if (pointer){
         //cast the pointer to the block as it is currently void and use the size anded with one to succesfully retrieve the header pointer from the void pointer 
-        *pointer = ((node*)pointer)->s | 1;
+        *pointer = ((node*)pointer)->s | 1;//QUESTION ON WHAT THIS LINE IS DOING
     }
 	else {
         // Oh dang, we couldnt find any freaking pointer in the find method, 
         pointer = mem_sbrk(newsize);
-        *pointer = newsize | 1;
+        *pointer = newsize | 1;//SAME WITH THIS ONE BIG SAUCE 
     }
     return (void *)((char *)pointer + HEADER_SIZE);
 }
-// this method is mostly finished, 
+// this method is mostly finished, I LOVE YOU, WHAT ELSE WOULD NEED TO BE DONE
 void *findspace(size_t size){
      node *blockpointer = mem_heap_lo();
     // Go through the heap, trying to find the block that could be the fit for the space that we are looking for.
